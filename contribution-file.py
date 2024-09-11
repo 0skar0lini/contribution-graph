@@ -1,4 +1,3 @@
-import calendar
 import datetime
 import os
 
@@ -71,13 +70,12 @@ def generate_commit_dates(start_date, message):
     current_date = start_date
     for char in message:
         if char in char_map:
-            for row in char_map[char]:
-                for col in row:
-                    if col == "1":
-                        commit_dates.append(current_date)
-                    current_date += datetime.timedelta(days=1)
-                current_date += datetime.timedelta(days=(days_in_week - len(row)))
-        current_date += datetime.timedelta(days=days_in_week)
+            for row in range(5):  # 5 rows for each character
+                for col in range(len(char_map[char][row])):
+                    if char_map[char][row][col] == "1":
+                        commit_dates.append(current_date + datetime.timedelta(weeks=row, days=col))
+                current_date += datetime.timedelta(days=1)  # Move to the next column
+        current_date += datetime.timedelta(days=1)  # Space between characters
     return commit_dates
 
 # Generate the commit dates
